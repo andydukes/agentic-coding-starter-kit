@@ -32,8 +32,9 @@ Living to-do list for the current application build. I will keep this updated as
 - [x] Add Prediction page: `src/app/models/[id]/prediction/page.tsx`
 - [x] Add Attributes page: `src/app/models/[id]/attributes/page.tsx`
 - [x] Make dashboard model detail cards clickable (`src/components/dashboard/model-detail.tsx`)
-- [ ] Attributes page: show linked endpoint indicator (reads from normalized layer once projection is added)
-- [ ] Attributes page: display lastValue (numeric/text) and expose an inspector for object payloads when available
+- [x] Attributes page: show linked endpoint indicator (reads from normalized layer once projection is added)
+- [x] Attributes page: display lastValue (numeric/text) and expose an inspector for object payloads when available
+- [x] Attributes page: add object inspector to view `lastValueObject` payload (collapsible JSON viewer)
 
 ### Admin & Integration
 - [ ] Admin APIs: CRUD for `endpoint_definitions` and `endpoint_operations`

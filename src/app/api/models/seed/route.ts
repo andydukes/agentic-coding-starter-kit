@@ -8,7 +8,23 @@ import {
   attributeDefinitions,
   responses,
 } from "@/lib/schema";
-import type { AttributeItem } from "@/lib/types";
+import type { AttributeItem, DomainCategorical, DomainReal } from "@/lib/types";
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null;
+}
+
+function isDomainC(d: AttributeItem["domain"]): d is DomainCategorical {
+  return isRecord(d) && Array.isArray((d as { values?: unknown }).values);
+}
+
+function isDomainR(d: AttributeItem["domain"]): d is DomainReal {
+  return (
+    isRecord(d) &&
+    typeof (d as { lower?: unknown }).lower === "number" &&
+    typeof (d as { upper?: unknown }).upper === "number"
+  );
+}
 
 export async function POST() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -243,6 +259,23 @@ export async function POST() {
             : null,
         execPathParams: null,
         execQueryParams: null,
+        // Seed lastValue previews
+        lastValueNumber:
+          isDomainR(a.domain)
+            ? (m.modelId === "64b5fb610a0b7a621acb1e4b" && idx === 0
+                ? "42"
+                : String(Math.floor(Math.random() * 100)))
+            : null,
+        lastValueText: isDomainC(a.domain) ? a.domain.values[0] ?? null : null,
+        lastValueObject:
+          m.modelId === "64b5fb610a0b7a621acb1e4b" && idx === 0
+            ? { sample: true, message: "Seeded object payload" }
+            : null,
+        lastValueUpdatedAt: new Date(),
+        lastValueSource:
+          m.modelId === "64b5fb610a0b7a621acb1e4b" && idx === 0
+            ? "endpoint"
+            : "webhook",
       }));
     });
 
