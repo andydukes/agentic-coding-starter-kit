@@ -1,0 +1,211 @@
+{
+    "title": "Model",
+    "type": "object",
+    "description": "An UP2TOM Digital Twin AI model",
+    "required": [
+        "id",
+        "type",
+        "modelId",
+        "userId",
+        "attributes"
+    ],
+    "properties": {
+        "id": {
+            "description": "ID of the model",
+            "type": "string",
+            "example": "64b5fb610a0b7a621acb1e4b"
+        },
+        "type": {
+            "type": "string",
+            "example": "model"
+        },
+        "modelId": {
+            "description": "ID of the up2tom model",
+            "type": "string",
+            "example": "64b5fb610a0b7a621acb1e4b"
+        },
+        "userId": {
+            "description": "ID of the user",
+            "type": "string",
+            "example": "64b5fb610a0b7a621acb1e4b"
+        },        
+        "attributes": {
+            "type": "object",
+            "required": [
+                "name",
+                "description",
+                "metadata",
+                "publisher",
+                "publish-date"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Server Alarm V2 - Reduce Load true or false"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Disk temperature warning - take permeative action based on server room environment,  HVAC status and ventilation speed, outside temperature and forecast high for the day."
+                },
+                "metadata": {
+                    "type": "object",
+                    "required": [
+                        "prediction",
+                        "attributes"
+                    ],
+                    "properties": {
+                        "prediction": {
+                            "type": "object",
+                            "required": [
+                                "domain",
+                                "name",
+                                "question",
+                                "type"
+                            ],
+                            "properties": {
+                                "domain": {
+                                    "type": "object",
+                                    "required": [
+                                        "type",
+                                        "values"
+                                    ],
+                                    "properties": {
+                                        "type": {
+                                            "description": "The type of the domain",
+                                            "type": "string",
+                                            "example": "DomainC"
+                                        },
+                                        "values": {
+                                            "description": "The allowed values of the domain",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
+                                "name": {
+                                    "description": "Name of the Prediction attribute",
+                                    "type": "string",
+                                    "example": "INPUTVAR0"
+                                },
+                                "question": {
+                                    "description": "Question to be answered by the Prediction",
+                                    "type": "string",
+                                    "example": "Should we admit this patient?"
+                                },
+                                "type": {
+                                    "description": "The type of the Prediction",
+                                    "type": "string",
+                                    "example": "Nominal"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "attributes": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "required": [
+                                    "domain",
+                                    "name",
+                                    "question",
+                                    "type"
+                                ],
+                                "properties": {
+                                    "domain": {
+                                        "oneOf": [
+                                            {
+                                                "type": "object",
+                                                "required": [
+                                                    "type",
+                                                    "values"
+                                                ],
+                                                "properties": {
+                                                    "type": {
+                                                        "description": "The type of the domain",
+                                                        "type": "string",
+                                                        "example": "DomainC"
+                                                    },
+                                                    "values": {
+                                                        "description": "The allowed values of the domain",
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "additionalProperties": false
+                                            },
+                                            {
+                                                "type": "object",
+                                                "required": [
+                                                    "lower",
+                                                    "upper",
+                                                    "discrete"
+                                                ],
+                                                "properties": {
+                                                    "type": {
+                                                        "description": "The type of the domain",
+                                                        "type": "string",
+                                                        "example": "DomainR"
+                                                    },
+                                                    "lower": {
+                                                        "description": "The lower bound of the domain",
+                                                        "type": "integer"
+                                                    },
+                                                    "upper": {
+                                                        "description": "The upper bound of the domain",
+                                                        "type": "integer"
+                                                    },
+                                                    "discrete": {
+                                                        "description": "Whether the domain is discrete",
+                                                        "type": "boolean"
+                                                    },
+                                                    "interval": {
+                                                        "description": "The step of the variable used in simulation. This value can be used to restrict possible inputs",
+                                                        "type": "number",
+                                                        "default": 1
+                                                    }
+                                                },
+                                                "additionalProperties": false
+                                            }
+                                        ]
+                                    },
+                                    "name": {
+                                        "description": "Name of the Decision Input",
+                                        "type": "string",
+                                        "example": "INPUTVAR1"
+                                    },
+                                    "question": {
+                                        "description": "Question of the Decision Input",
+                                        "type": "string",
+                                        "example": "How old are you?"
+                                    },
+                                    "type": {
+                                        "description": "The type of the Decision Input",
+                                        "type": "string",
+                                        "example": "Continuous"
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "publisher": {
+                    "type": "string",
+                    "example": "Model Publisher"
+                },
+                "publish-date": {
+                    "type": "string",
+                    "example": "Model Publish Date"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

@@ -63,7 +63,7 @@ The project already includes several shadcn/ui components (button, dialog, avata
 
 ## What I Want to Build
 
-Basic todo list app with the ability for users to add, remove, update, complete and view todos.
+I want to build a dashboard application that allows users to manage their UP2TOM models. Initially, the application will only have a login page and a dashboard page. The dashboard page will have a list of all the models that the user has created. Each model will have a name, description, and a button to display the full model details. The user will be able to display the model details in a modal details only. Editing, deleting, and creating models will be available in the future.
 
 ## Request
 

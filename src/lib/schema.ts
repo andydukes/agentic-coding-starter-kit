@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, jsonb, integer, numeric } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -48,4 +48,102 @@ export const verification = pgTable("verification", {
   expiresAt: timestamp("expiresAt").notNull(),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").defaultNow(),
+});
+
+// UP2TOM models owned by a user
+export const model = pgTable("model", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  // New fields to align with UP2TOM model schema
+  type: text("type").notNull(),
+  modelId: text("modelId").notNull(),
+  attributes: jsonb("attributes").notNull(),
+  // Legacy fields retained temporarily for migration/backfill
+  name: text("name").notNull(),
+  description: text("description"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+export const endpointDefinitions = pgTable("endpoint_definitions", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  provider: text("provider").notNull(), // e.g., "openai", "http"
+  baseUrlTemplate: text("baseUrlTemplate"),
+  authRef: text("authRef"), // reference/alias to secret manager
+  defaultHeaders: jsonb("defaultHeaders"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+// Endpoint operations (paths/methods/options) under a definition
+export const endpointOperations = pgTable("endpoint_operations", {
+  id: text("id").primaryKey(),
+  endpointDefinitionId: text("endpointDefinitionId")
+    .notNull()
+    .references(() => endpointDefinitions.id, { onDelete: "cascade" }),
+  operationName: text("operationName").notNull(),
+  httpMethod: text("httpMethod").notNull(), // GET|POST|...
+  pathTemplate: text("pathTemplate").notNull(),
+  requestSchema: jsonb("requestSchema"),
+  querySchema: jsonb("querySchema"),
+  responseSchema: jsonb("responseSchema"),
+  options: jsonb("options"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+// Attribute definitions normalized per model (immutable by contract)
+export const attributeDefinitions = pgTable("attribute_definitions", {
+  id: text("id").primaryKey(),
+  modelId: text("modelId")
+    .notNull()
+    .references(() => model.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  question: text("question").notNull(),
+  type: text("type").notNull(), // e.g., "Continuous", "Nominal"
+  domain: jsonb("domain").notNull(), // DomainC/DomainR
+  extraFields: jsonb("extraFields"),
+  endpointDefinitionId: text("endpointDefinitionId").references(
+    () => endpointDefinitions.id,
+    { onDelete: "set null" }
+  ),
+  operationId: text("operationId").references(() => endpointOperations.id, {
+    onDelete: "set null",
+  }),
+  execBaseUrl: text("execBaseUrl"),
+  execPathParams: jsonb("execPathParams"),
+  execQueryParams: jsonb("execQueryParams"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+// Responses log for endpoint invocations
+export const responses = pgTable("responses", {
+  id: text("id").primaryKey(),
+  attributeDefinitionId: text("attributeDefinitionId")
+    .notNull()
+    .references(() => attributeDefinitions.id, { onDelete: "cascade" }),
+  endpointDefinitionId: text("endpointDefinitionId").references(
+    () => endpointDefinitions.id,
+    { onDelete: "set null" }
+  ),
+  operationId: text("operationId").references(() => endpointOperations.id, {
+    onDelete: "set null",
+  }),
+  requestUrl: text("requestUrl"),
+  requestHeaders: jsonb("requestHeaders"),
+  requestQuery: jsonb("requestQuery"),
+  requestBody: jsonb("requestBody"),
+  responseStatus: integer("responseStatus"),
+  responseHeaders: jsonb("responseHeaders"),
+  responseBody: jsonb("responseBody"),
+  error: jsonb("error"),
+  latencyMs: integer("latencyMs"),
+  tokensIn: integer("tokensIn"),
+  tokensOut: integer("tokensOut"),
+  cost: numeric("cost"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
 });
