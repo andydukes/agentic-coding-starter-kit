@@ -90,6 +90,9 @@ export const endpointOperations = pgTable("endpoint_operations", {
   requestSchema: jsonb("requestSchema"),
   querySchema: jsonb("querySchema"),
   responseSchema: jsonb("responseSchema"),
+  // Optional extraction rules to derive scalar from object responses
+  responseExtractPath: text("responseExtractPath"), // JSON Pointer or JSONPath
+  responseExtractFormat: text("responseExtractFormat"), // e.g., "number", "string"
   options: jsonb("options"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
@@ -116,6 +119,15 @@ export const attributeDefinitions = pgTable("attribute_definitions", {
   execBaseUrl: text("execBaseUrl"),
   execPathParams: jsonb("execPathParams"),
   execQueryParams: jsonb("execQueryParams"),
+  // Last value tracking (scalar/object + provenance)
+  lastValueNumber: numeric("lastValueNumber"),
+  lastValueText: text("lastValueText"),
+  lastValueObject: jsonb("lastValueObject"),
+  lastValueUpdatedAt: timestamp("lastValueUpdatedAt"),
+  lastValueSource: text("lastValueSource"), // endpoint|webhook|manual
+  // lastResponseId kept as plain text to avoid circular type reference at compile time
+  lastResponseId: text("lastResponseId"),
+  lastValueMeta: jsonb("lastValueMeta"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });

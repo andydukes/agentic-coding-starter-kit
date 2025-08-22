@@ -1,6 +1,7 @@
 "use client";
 
 import type { Model } from "@/lib/types";
+import Link from "next/link";
 
 export function ModelDetail({ model }: { model: Model }) {
   return (
@@ -46,22 +47,22 @@ export function ModelDetail({ model }: { model: Model }) {
         </div>
       </section>
 
-      {/* Metadata section with non-clickable placeholders */}
+      {/* Metadata section with clickable cards */}
       <section className="space-y-3">
         <div className="text-base font-semibold">Metadata</div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="border rounded-md p-4 bg-muted/20">
+          <Link href={`/models/${model.id}/prediction`} className="border rounded-md p-4 bg-muted/20 hover:bg-muted/30 transition-colors">
             <div className="text-sm font-medium mb-1">Prediction</div>
             <div className="text-sm text-muted-foreground">
-              This area will show metadata.prediction. (Non-clickable placeholder)
+              View prediction metadata for this model.
             </div>
-          </div>
-          <div className="border rounded-md p-4 bg-muted/20">
+          </Link>
+          <Link href={`/models/${model.id}/attributes`} className="border rounded-md p-4 bg-muted/20 hover:bg-muted/30 transition-colors">
             <div className="text-sm font-medium mb-1">Attributes</div>
             <div className="text-sm text-muted-foreground">
-              This area will show metadata.attributes. (Non-clickable placeholder)
+              View attributes metadata for this model.
             </div>
-          </div>
+          </Link>
         </div>
       </section>
     </div>
