@@ -36,7 +36,17 @@ export function ImportOpenApi() {
       }
 
       if (!res.ok) {
-        const t = await res.text();
+        const t = (await res.text()) || "";
+        if (res.status === 413 || /too large|exceeded size limit/i.test(t)) {
+          setError("The spec is too large. Please upload a smaller file or reduce remote spec size.");
+          setBusy(false);
+          return;
+        }
+        if (/timed out/i.test(t)) {
+          setError("The import timed out. Try a smaller spec or try again later.");
+          setBusy(false);
+          return;
+        }
         throw new Error(t || `Import failed (${res.status})`);
       }
 
