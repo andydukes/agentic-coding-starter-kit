@@ -33,6 +33,15 @@ export function DashboardSidebar({ userName }: { userName: string }) {
         >
           Models
         </Link>
+        <Link
+          href="/dashboard/endpoints"
+          className={
+            "text-sm font-medium px-2 py-1 rounded hover:bg-muted transition " +
+            (pathname?.startsWith("/dashboard/endpoints") ? "bg-muted" : "")
+          }
+        >
+          Endpoints
+        </Link>
       </nav>
 
       <div className="mt-auto">

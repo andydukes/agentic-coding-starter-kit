@@ -1,0 +1,118 @@
+openapi: 3.0.3
+info:
+  title: Agentic Coding Starter Kit API
+  version: 0.1.0
+  description: External webhook for updating attribute last values with domain validation.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:3000
+components:
+  securitySchemes:
+    webhookSecret:
+      type: apiKey
+      in: header
+      name: X-Webhook-Secret
+  schemas:
+    WebhookInputItem:
+      type: object
+      required: [name, value]
+      properties:
+        name:
+          type: string
+        value: {}
+    WebhookRequest:
+      type: object
+      required: [inputs]
+      properties:
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookInputItem'
+        responseId:
+          type: string
+    WebhookResultItem:
+      type: object
+      required: [name, status]
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+          enum: [updated, error]
+        error:
+          type: string
+    WebhookResponse:
+      type: object
+      required: [modelId, results]
+      properties:
+        modelId:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookResultItem'
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+paths:
+  /api/models/{id}/webhook:
+    post:
+      tags: [Webhook]
+      summary: Update last values for a model's attributes by name
+      operationId: postModelsWebhook
+      security:
+        - webhookSecret: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+      responses:
+        '200':
+          description: All updates succeeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+        '207':
+          description: Mixed success/failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Model not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Domain validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
