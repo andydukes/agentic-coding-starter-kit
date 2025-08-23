@@ -72,7 +72,16 @@ export const endpointDefinitions = pgTable("endpoint_definitions", {
   name: text("name").notNull().unique(),
   provider: text("provider").notNull(), // e.g., "openai", "http"
   baseUrlTemplate: text("baseUrlTemplate"),
-  authRef: text("authRef"), // reference/alias to secret manager
+  // Authentication configuration
+  authType: text('auth_type').$type<'NONE' | 'BASIC' | 'BEARER' | 'API_KEY'>().default('NONE'),
+  authRef: text('auth_ref'),
+  authConfig: jsonb('auth_config').$type<{
+    // For API_KEY
+    keyName?: string;
+    keyLocation?: 'header' | 'query';
+    // For BASIC/BEARER
+    tokenPrefix?: string;
+  }>(), // reference/alias to secret manager
   defaultHeaders: jsonb("defaultHeaders"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
@@ -119,6 +128,9 @@ export const attributeDefinitions = pgTable("attribute_definitions", {
   execBaseUrl: text("execBaseUrl"),
   execPathParams: jsonb("execPathParams"),
   execQueryParams: jsonb("execQueryParams"),
+  execHeaders: jsonb("execHeaders"),
+  execBody: jsonb("execBody"),
+  execAuthRef: text("execAuthRef"), // Override auth_ref from endpoint_definition at execution time
   // Last value tracking (scalar/object + provenance)
   lastValueNumber: numeric("lastValueNumber"),
   lastValueText: text("lastValueText"),

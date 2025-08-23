@@ -1,0 +1,2238 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "up2tom API",
+    "termsOfService": "https://up2tom.com/terms/",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "contact": {
+      "name": "Contact our support",
+      "email": "contact@e2tech.com"
+    },
+    "x-logo": {
+      "url": "https://up2tomv10.e2tech.com/layout/images/logo-white.png",
+      "altText": "e2integrate logo"
+    },
+    "description": "UP2TOM API"
+  },
+  "servers": [
+    {
+      "url": "https://api.up2tom.com/v3"
+    }
+  ],
+  "security": [
+    {
+      "bearerHttpAuthentication": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Model",
+      "description": "UP2TOM Model operations"
+    },
+    {
+      "name": "Decision",
+      "description": "UP2TOM Decision operations"
+    },
+    {
+      "name": "Info",
+      "description": "UP2TOM Info operations"
+    }
+  ],
+  "paths": {
+    "/models/{id}": {
+      "get": {
+        "tags": [
+          "Model"
+        ],
+        "summary": "Get model by ID",
+        "description": "Returns an UP2TOM model based on a single ID",
+        "operationId": "findModelById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the model to fetch",
+            "example": "64b5fb610a0b7a621acb1e4b",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Model Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Model",
+                  "type": "object",
+                  "description": "An UP2TOM Digital Twin AI model",
+                  "required": [
+                    "id",
+                    "type",
+                    "attributes"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "model"
+                    },
+                    "id": {
+                      "description": "ID of the model",
+                      "type": "string",
+                      "example": "64b5fb610a0b7a621acb1e4b"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "description",
+                        "metadata",
+                        "publisher",
+                        "publish-date"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Server Alarm V2 - Reduce Load true or false"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Disk temperature warning - take permeative action based on server room environment,  HVAC status and ventilation speed, outside temperature and forecast high for the day."
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "required": [
+                            "prediction",
+                            "attributes"
+                          ],
+                          "properties": {
+                            "prediction": {
+                              "type": "object",
+                              "required": [
+                                "domain",
+                                "name",
+                                "question",
+                                "type"
+                              ],
+                              "properties": {
+                                "domain": {
+                                  "type": "object",
+                                  "required": [
+                                    "type",
+                                    "values"
+                                  ],
+                                  "properties": {
+                                    "type": {
+                                      "description": "The type of the domain",
+                                      "type": "string",
+                                      "example": "DomainC"
+                                    },
+                                    "values": {
+                                      "description": "The allowed values of the domain",
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  },
+                                  "additionalProperties": false
+                                },
+                                "name": {
+                                  "description": "Name of the Prediction attribute",
+                                  "type": "string",
+                                  "example": "INPUTVAR0"
+                                },
+                                "question": {
+                                  "description": "Question to be answered by the Prediction",
+                                  "type": "string",
+                                  "example": "Should we admit this patient?"
+                                },
+                                "type": {
+                                  "description": "The type of the Prediction",
+                                  "type": "string",
+                                  "example": "Nominal"
+                                }
+                              },
+                              "additionalProperties": false
+                            },
+                            "attributes": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "domain",
+                                  "name",
+                                  "question",
+                                  "type"
+                                ],
+                                "properties": {
+                                  "domain": {
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "type",
+                                          "values"
+                                        ],
+                                        "properties": {
+                                          "type": {
+                                            "description": "The type of the domain",
+                                            "type": "string",
+                                            "example": "DomainC"
+                                          },
+                                          "values": {
+                                            "description": "The allowed values of the domain",
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        },
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "lower",
+                                          "upper",
+                                          "discrete"
+                                        ],
+                                        "properties": {
+                                          "type": {
+                                            "description": "The type of the domain",
+                                            "type": "string",
+                                            "example": "DomainR"
+                                          },
+                                          "lower": {
+                                            "description": "The lower bound of the domain",
+                                            "type": "integer"
+                                          },
+                                          "upper": {
+                                            "description": "The upper bound of the domain",
+                                            "type": "integer"
+                                          },
+                                          "discrete": {
+                                            "description": "Whether the domain is discrete",
+                                            "type": "boolean"
+                                          },
+                                          "interval": {
+                                            "description": "The step of the variable used in simulation. This value can be used to restrict possible inputs",
+                                            "type": "number",
+                                            "default": 1
+                                          }
+                                        },
+                                        "additionalProperties": false
+                                      }
+                                    ]
+                                  },
+                                  "name": {
+                                    "description": "Name of the Decision Input",
+                                    "type": "string",
+                                    "example": "INPUTVAR1"
+                                  },
+                                  "question": {
+                                    "description": "Question of the Decision Input",
+                                    "type": "string",
+                                    "example": "How old are you?"
+                                  },
+                                  "type": {
+                                    "description": "The type of the Decision Input",
+                                    "type": "string",
+                                    "example": "Continuous"
+                                  }
+                                },
+                                "additionalProperties": false
+                              }
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        "publisher": {
+                          "type": "string",
+                          "example": "Model Publisher"
+                        },
+                        "publish-date": {
+                          "type": "string",
+                          "example": "Model Publish Date"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "minProperties": 1,
+                  "description": "The Problem Details JSON Object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference",
+                      "format": "uri"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Problem Summary"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code.",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem."
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerHttpAuthentication": []
+          }
+        ]
+      }
+    },
+    "/models": {
+      "get": {
+        "tags": [
+          "Model"
+        ],
+        "summary": "Models List",
+        "description": "Returns all UP2TOM models the user is authorized to access.",
+        "operationId": "findModels",
+        "responses": {
+          "200": {
+            "description": "Models List.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "title": "Model",
+                    "type": "object",
+                    "description": "An UP2TOM Digital Twin AI model",
+                    "required": [
+                      "id",
+                      "type",
+                      "attributes"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "model"
+                      },
+                      "id": {
+                        "description": "ID of the model",
+                        "type": "string",
+                        "example": "64b5fb610a0b7a621acb1e4b"
+                      },
+                      "attributes": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                          "description",
+                          "metadata",
+                          "publisher",
+                          "publish-date"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "example": "Server Alarm V2 - Reduce Load true or false"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "Disk temperature warning - take permeative action based on server room environment,  HVAC status and ventilation speed, outside temperature and forecast high for the day."
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "required": [
+                              "prediction",
+                              "attributes"
+                            ],
+                            "properties": {
+                              "prediction": {
+                                "type": "object",
+                                "required": [
+                                  "domain",
+                                  "name",
+                                  "question",
+                                  "type"
+                                ],
+                                "properties": {
+                                  "domain": {
+                                    "type": "object",
+                                    "required": [
+                                      "type",
+                                      "values"
+                                    ],
+                                    "properties": {
+                                      "type": {
+                                        "description": "The type of the domain",
+                                        "type": "string",
+                                        "example": "DomainC"
+                                      },
+                                      "values": {
+                                        "description": "The allowed values of the domain",
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    },
+                                    "additionalProperties": false
+                                  },
+                                  "name": {
+                                    "description": "Name of the Prediction attribute",
+                                    "type": "string",
+                                    "example": "INPUTVAR0"
+                                  },
+                                  "question": {
+                                    "description": "Question to be answered by the Prediction",
+                                    "type": "string",
+                                    "example": "Should we admit this patient?"
+                                  },
+                                  "type": {
+                                    "description": "The type of the Prediction",
+                                    "type": "string",
+                                    "example": "Nominal"
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              "attributes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "required": [
+                                    "domain",
+                                    "name",
+                                    "question",
+                                    "type"
+                                  ],
+                                  "properties": {
+                                    "domain": {
+                                      "oneOf": [
+                                        {
+                                          "type": "object",
+                                          "required": [
+                                            "type",
+                                            "values"
+                                          ],
+                                          "properties": {
+                                            "type": {
+                                              "description": "The type of the domain",
+                                              "type": "string",
+                                              "example": "DomainC"
+                                            },
+                                            "values": {
+                                              "description": "The allowed values of the domain",
+                                              "type": "array",
+                                              "items": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          "additionalProperties": false
+                                        },
+                                        {
+                                          "type": "object",
+                                          "required": [
+                                            "lower",
+                                            "upper",
+                                            "discrete"
+                                          ],
+                                          "properties": {
+                                            "type": {
+                                              "description": "The type of the domain",
+                                              "type": "string",
+                                              "example": "DomainR"
+                                            },
+                                            "lower": {
+                                              "description": "The lower bound of the domain",
+                                              "type": "integer"
+                                            },
+                                            "upper": {
+                                              "description": "The upper bound of the domain",
+                                              "type": "integer"
+                                            },
+                                            "discrete": {
+                                              "description": "Whether the domain is discrete",
+                                              "type": "boolean"
+                                            },
+                                            "interval": {
+                                              "description": "The step of the variable used in simulation. This value can be used to restrict possible inputs",
+                                              "type": "number",
+                                              "default": 1
+                                            }
+                                          },
+                                          "additionalProperties": false
+                                        }
+                                      ]
+                                    },
+                                    "name": {
+                                      "description": "Name of the Decision Input",
+                                      "type": "string",
+                                      "example": "INPUTVAR1"
+                                    },
+                                    "question": {
+                                      "description": "Question of the Decision Input",
+                                      "type": "string",
+                                      "example": "How old are you?"
+                                    },
+                                    "type": {
+                                      "description": "The type of the Decision Input",
+                                      "type": "string",
+                                      "example": "Continuous"
+                                    }
+                                  },
+                                  "additionalProperties": false
+                                }
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "publisher": {
+                            "type": "string",
+                            "example": "Model Publisher"
+                          },
+                          "publish-date": {
+                            "type": "string",
+                            "example": "Model Publish Date"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "minProperties": 1,
+                  "description": "The Problem Details JSON Object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference",
+                      "format": "uri"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Problem Summary"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code.",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem."
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerHttpAuthentication": []
+          }
+        ]
+      }
+    },
+    "/decision": {
+      "post": {
+        "tags": [
+          "Decision"
+        ],
+        "summary": "Decision",
+        "description": "returns a decision using a specific model and an input scenario.",
+        "operationId": "decision",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "attributes"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "scenario"
+                    ],
+                    "description": "Type of request"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "properties": {
+                      "input": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        },
+                        "example": {
+                          "INPUTVAR1": 30,
+                          "INPUTVAR2": 60,
+                          "INPUTVAR3": 13.25,
+                          "INPUTVAR4": 22.13,
+                          "INPUTVAR5": 53
+                        }
+                      }
+                    },
+                    "required": [
+                      "input"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Decision Object.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "attributes",
+                    "id",
+                    "type"
+                  ],
+                  "properties": {
+                    "attributes": {
+                      "type": "object",
+                      "required": [
+                        "input",
+                        "decision",
+                        "meets-confidence",
+                        "model",
+                        "timestamp",
+                        "reasons",
+                        "confidence"
+                      ],
+                      "properties": {
+                        "input": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "example": {
+                            "INPUTVAR1": 30,
+                            "INPUTVAR2": 60,
+                            "INPUTVAR3": 13.25,
+                            "INPUTVAR4": 22.13,
+                            "INPUTVAR5": 53
+                          }
+                        },
+                        "decision": {
+                          "description": "UP2TOM Decision outcome",
+                          "type": "string",
+                          "example": "Yes"
+                        },
+                        "meets-confidence": {
+                          "description": "True if the decision meets the confidence threshold",
+                          "type": "boolean"
+                        },
+                        "model": {
+                          "description": "UP2TOM Model ID",
+                          "type": "string"
+                        },
+                        "timestamp": {
+                          "description": "Decision timestamp",
+                          "type": "string"
+                        },
+                        "reasons": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "antecedent",
+                              "consequent",
+                              "type"
+                            ],
+                            "properties": {
+                              "antecedent": {
+                                "type": "object",
+                                "required": [
+                                  "index",
+                                  "threshold",
+                                  "type"
+                                ],
+                                "properties": {
+                                  "index": {
+                                    "description": "Index of the UP2TOM Decision Input that has triggered this UP2TOM Prediction Outcome",
+                                    "type": "integer",
+                                    "example": 4
+                                  },
+                                  "threshold": {
+                                    "description": "The threshold of the UP2TOM Decision Input configured to cause this trigger",
+                                    "type": "integer",
+                                    "example": 55
+                                  },
+                                  "type": {
+                                    "description": "The type of trigger rule",
+                                    "type": "string",
+                                    "example": "GT"
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              "consequent": {
+                                "type": "object",
+                                "required": [
+                                  "type",
+                                  "value"
+                                ],
+                                "properties": {
+                                  "type": {
+                                    "description": "The consequent AI result type",
+                                    "type": "string",
+                                    "example": "ClassRes"
+                                  },
+                                  "value": {
+                                    "description": "The UP2TOM Prediction Outcome",
+                                    "type": "string",
+                                    "example": "Yes"
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              "type": {
+                                "description": "The Type of Reason for this UP2TOM Prediction Outcome",
+                                "type": "string",
+                                "enum": [
+                                  "BlantentEx",
+                                  "ValueEx"
+                                ]
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "confidence": {
+                          "description": "Decision confidence",
+                          "type": "number"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "id": {
+                      "description": "Unique ID of the Decision",
+                      "type": "string",
+                      "example": "64b5fb610a0b7a621acb1e4b-b961da1c"
+                    },
+                    "type": {
+                      "description": "Type of the Decision",
+                      "type": "string",
+                      "example": "scenario"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "minProperties": 1,
+                  "description": "The Problem Details JSON Object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "A URI reference",
+                      "format": "uri"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Problem Summary"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "description": "The HTTP status code.",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "detail": {
+                      "type": "string",
+                      "description": "A human-readable explanation specific to this occurrence of the problem."
+                    },
+                    "instance": {
+                      "type": "string",
+                      "description": "A URI reference that identifies the specific occurrence of the problem."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerHttpAuthentication": []
+          }
+        ]
+      }
+    }
+  },
+  "webhooks": {
+    "newModel": {
+      "post": {
+        "summary": "New model webhook",
+        "description": "Information about a new model in the system.",
+        "operationId": "newModel",
+        "tags": [
+          "Info"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Model",
+                "type": "object",
+                "description": "An UP2TOM Digital Twin AI model",
+                "required": [
+                  "id",
+                  "type",
+                  "attributes"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "model"
+                  },
+                  "id": {
+                    "description": "ID of the model",
+                    "type": "string",
+                    "example": "64b5fb610a0b7a621acb1e4b"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "description",
+                      "metadata",
+                      "publisher",
+                      "publish-date"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "Server Alarm V2 - Reduce Load true or false"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "Disk temperature warning - take permeative action based on server room environment,  HVAC status and ventilation speed, outside temperature and forecast high for the day."
+                      },
+                      "metadata": {
+                        "type": "object",
+                        "required": [
+                          "prediction",
+                          "attributes"
+                        ],
+                        "properties": {
+                          "prediction": {
+                            "type": "object",
+                            "required": [
+                              "domain",
+                              "name",
+                              "question",
+                              "type"
+                            ],
+                            "properties": {
+                              "domain": {
+                                "type": "object",
+                                "required": [
+                                  "type",
+                                  "values"
+                                ],
+                                "properties": {
+                                  "type": {
+                                    "description": "The type of the domain",
+                                    "type": "string",
+                                    "example": "DomainC"
+                                  },
+                                  "values": {
+                                    "description": "The allowed values of the domain",
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              "name": {
+                                "description": "Name of the Prediction attribute",
+                                "type": "string",
+                                "example": "INPUTVAR0"
+                              },
+                              "question": {
+                                "description": "Question to be answered by the Prediction",
+                                "type": "string",
+                                "example": "Should we admit this patient?"
+                              },
+                              "type": {
+                                "description": "The type of the Prediction",
+                                "type": "string",
+                                "example": "Nominal"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "attributes": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "domain",
+                                "name",
+                                "question",
+                                "type"
+                              ],
+                              "properties": {
+                                "domain": {
+                                  "oneOf": [
+                                    {
+                                      "type": "object",
+                                      "required": [
+                                        "type",
+                                        "values"
+                                      ],
+                                      "properties": {
+                                        "type": {
+                                          "description": "The type of the domain",
+                                          "type": "string",
+                                          "example": "DomainC"
+                                        },
+                                        "values": {
+                                          "description": "The allowed values of the domain",
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string"
+                                          }
+                                        }
+                                      },
+                                      "additionalProperties": false
+                                    },
+                                    {
+                                      "type": "object",
+                                      "required": [
+                                        "lower",
+                                        "upper",
+                                        "discrete"
+                                      ],
+                                      "properties": {
+                                        "type": {
+                                          "description": "The type of the domain",
+                                          "type": "string",
+                                          "example": "DomainR"
+                                        },
+                                        "lower": {
+                                          "description": "The lower bound of the domain",
+                                          "type": "integer"
+                                        },
+                                        "upper": {
+                                          "description": "The upper bound of the domain",
+                                          "type": "integer"
+                                        },
+                                        "discrete": {
+                                          "description": "Whether the domain is discrete",
+                                          "type": "boolean"
+                                        },
+                                        "interval": {
+                                          "description": "The step of the variable used in simulation. This value can be used to restrict possible inputs",
+                                          "type": "number",
+                                          "default": 1
+                                        }
+                                      },
+                                      "additionalProperties": false
+                                    }
+                                  ]
+                                },
+                                "name": {
+                                  "description": "Name of the Decision Input",
+                                  "type": "string",
+                                  "example": "INPUTVAR1"
+                                },
+                                "question": {
+                                  "description": "Question of the Decision Input",
+                                  "type": "string",
+                                  "example": "How old are you?"
+                                },
+                                "type": {
+                                  "description": "The type of the Decision Input",
+                                  "type": "string",
+                                  "example": "Continuous"
+                                }
+                              },
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "publisher": {
+                        "type": "string",
+                        "example": "Model Publisher"
+                      },
+                      "publish-date": {
+                        "type": "string",
+                        "example": "Model Publish Date"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved information about a new model."
+          }
+        },
+        "security": [
+          {
+            "bearerHttpAuthentication": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyHeader": {
+        "description": "UP2TOM API Key in Header",
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      },
+      "bearerHttpAuthentication": {
+        "description": "Bearer token using a JWT",
+        "type": "http",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "CategoricalDomain": {
+        "type": "object",
+        "required": [
+          "type",
+          "values"
+        ],
+        "properties": {
+          "type": {
+            "description": "The type of the domain",
+            "type": "string",
+            "example": "DomainC"
+          },
+          "values": {
+            "description": "The allowed values of the domain",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Prediction": {
+        "type": "object",
+        "required": [
+          "domain",
+          "name",
+          "question",
+          "type"
+        ],
+        "properties": {
+          "domain": {
+            "type": "object",
+            "required": [
+              "type",
+              "values"
+            ],
+            "properties": {
+              "type": {
+                "description": "The type of the domain",
+                "type": "string",
+                "example": "DomainC"
+              },
+              "values": {
+                "description": "The allowed values of the domain",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "name": {
+            "description": "Name of the Prediction attribute",
+            "type": "string",
+            "example": "INPUTVAR0"
+          },
+          "question": {
+            "description": "Question to be answered by the Prediction",
+            "type": "string",
+            "example": "Should we admit this patient?"
+          },
+          "type": {
+            "description": "The type of the Prediction",
+            "type": "string",
+            "example": "Nominal"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContinuousDomain": {
+        "type": "object",
+        "required": [
+          "lower",
+          "upper",
+          "discrete"
+        ],
+        "properties": {
+          "type": {
+            "description": "The type of the domain",
+            "type": "string",
+            "example": "DomainR"
+          },
+          "lower": {
+            "description": "The lower bound of the domain",
+            "type": "integer"
+          },
+          "upper": {
+            "description": "The upper bound of the domain",
+            "type": "integer"
+          },
+          "discrete": {
+            "description": "Whether the domain is discrete",
+            "type": "boolean"
+          },
+          "interval": {
+            "description": "The step of the variable used in simulation. This value can be used to restrict possible inputs",
+            "type": "number",
+            "default": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "Attribute": {
+        "type": "object",
+        "required": [
+          "domain",
+          "name",
+          "question",
+          "type"
+        ],
+        "properties": {
+          "domain": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "type",
+                  "values"
+                ],
+                "properties": {
+                  "type": {
+                    "description": "The type of the domain",
+                    "type": "string",
+                    "example": "DomainC"
+                  },
+                  "values": {
+                    "description": "The allowed values of the domain",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": [
+                  "lower",
+                  "upper",
+                  "discrete"
+                ],
+                "properties": {
+                  "type": {
+                    "description": "The type of the domain",
+                    "type": "string",
+                    "example": "DomainR"
+                  },
+                  "lower": {
+                    "description": "The lower bound of the domain",
+                    "type": "integer"
+                  },
+                  "upper": {
+                    "description": "The upper bound of the domain",
+                    "type": "integer"
+                  },
+                  "discrete": {
+                    "description": "Whether the domain is discrete",
+                    "type": "boolean"
+                  },
+                  "interval": {
+                    "description": "The step of the variable used in simulation. This value can be used to restrict possible inputs",
+                    "type": "number",
+                    "default": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
+          "name": {
+            "description": "Name of the Decision Input",
+            "type": "string",
+            "example": "INPUTVAR1"
+          },
+          "question": {
+            "description": "Question of the Decision Input",
+            "type": "string",
+            "example": "How old are you?"
+          },
+          "type": {
+            "description": "The type of the Decision Input",
+            "type": "string",
+            "example": "Continuous"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModelMetadata": {
+        "type": "object",
+        "required": [
+          "prediction",
+          "attributes"
+        ],
+        "properties": {
+          "prediction": {
+            "type": "object",
+            "required": [
+              "domain",
+              "name",
+              "question",
+              "type"
+            ],
+            "properties": {
+              "domain": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "values"
+                ],
+                "properties": {
+                  "type": {
+                    "description": "The type of the domain",
+                    "type": "string",
+                    "example": "DomainC"
+                  },
+                  "values": {
+                    "description": "The allowed values of the domain",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "name": {
+                "description": "Name of the Prediction attribute",
+                "type": "string",
+                "example": "INPUTVAR0"
+              },
+              "question": {
+                "description": "Question to be answered by the Prediction",
+                "type": "string",
+                "example": "Should we admit this patient?"
+              },
+              "type": {
+                "description": "The type of the Prediction",
+                "type": "string",
+                "example": "Nominal"
+              }
+            },
+            "additionalProperties": false
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "domain",
+                "name",
+                "question",
+                "type"
+              ],
+              "properties": {
+                "domain": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "type",
+                        "values"
+                      ],
+                      "properties": {
+                        "type": {
+                          "description": "The type of the domain",
+                          "type": "string",
+                          "example": "DomainC"
+                        },
+                        "values": {
+                          "description": "The allowed values of the domain",
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "lower",
+                        "upper",
+                        "discrete"
+                      ],
+                      "properties": {
+                        "type": {
+                          "description": "The type of the domain",
+                          "type": "string",
+                          "example": "DomainR"
+                        },
+                        "lower": {
+                          "description": "The lower bound of the domain",
+                          "type": "integer"
+                        },
+                        "upper": {
+                          "description": "The upper bound of the domain",
+                          "type": "integer"
+                        },
+                        "discrete": {
+                          "description": "Whether the domain is discrete",
+                          "type": "boolean"
+                        },
+                        "interval": {
+                          "description": "The step of the variable used in simulation. This value can be used to restrict possible inputs",
+                          "type": "number",
+                          "default": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "name": {
+                  "description": "Name of the Decision Input",
+                  "type": "string",
+                  "example": "INPUTVAR1"
+                },
+                "question": {
+                  "description": "Question of the Decision Input",
+                  "type": "string",
+                  "example": "How old are you?"
+                },
+                "type": {
+                  "description": "The type of the Decision Input",
+                  "type": "string",
+                  "example": "Continuous"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModelAttributes": {
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "metadata",
+          "publisher",
+          "publish-date"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Server Alarm V2 - Reduce Load true or false"
+          },
+          "description": {
+            "type": "string",
+            "example": "Disk temperature warning - take permeative action based on server room environment,  HVAC status and ventilation speed, outside temperature and forecast high for the day."
+          },
+          "metadata": {
+            "type": "object",
+            "required": [
+              "prediction",
+              "attributes"
+            ],
+            "properties": {
+              "prediction": {
+                "type": "object",
+                "required": [
+                  "domain",
+                  "name",
+                  "question",
+                  "type"
+                ],
+                "properties": {
+                  "domain": {
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "values"
+                    ],
+                    "properties": {
+                      "type": {
+                        "description": "The type of the domain",
+                        "type": "string",
+                        "example": "DomainC"
+                      },
+                      "values": {
+                        "description": "The allowed values of the domain",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "name": {
+                    "description": "Name of the Prediction attribute",
+                    "type": "string",
+                    "example": "INPUTVAR0"
+                  },
+                  "question": {
+                    "description": "Question to be answered by the Prediction",
+                    "type": "string",
+                    "example": "Should we admit this patient?"
+                  },
+                  "type": {
+                    "description": "The type of the Prediction",
+                    "type": "string",
+                    "example": "Nominal"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "attributes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "domain",
+                    "name",
+                    "question",
+                    "type"
+                  ],
+                  "properties": {
+                    "domain": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "values"
+                          ],
+                          "properties": {
+                            "type": {
+                              "description": "The type of the domain",
+                              "type": "string",
+                              "example": "DomainC"
+                            },
+                            "values": {
+                              "description": "The allowed values of the domain",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "lower",
+                            "upper",
+                            "discrete"
+                          ],
+                          "properties": {
+                            "type": {
+                              "description": "The type of the domain",
+                              "type": "string",
+                              "example": "DomainR"
+                            },
+                            "lower": {
+                              "description": "The lower bound of the domain",
+                              "type": "integer"
+                            },
+                            "upper": {
+                              "description": "The upper bound of the domain",
+                              "type": "integer"
+                            },
+                            "discrete": {
+                              "description": "Whether the domain is discrete",
+                              "type": "boolean"
+                            },
+                            "interval": {
+                              "description": "The step of the variable used in simulation. This value can be used to restrict possible inputs",
+                              "type": "number",
+                              "default": 1
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "name": {
+                      "description": "Name of the Decision Input",
+                      "type": "string",
+                      "example": "INPUTVAR1"
+                    },
+                    "question": {
+                      "description": "Question of the Decision Input",
+                      "type": "string",
+                      "example": "How old are you?"
+                    },
+                    "type": {
+                      "description": "The type of the Decision Input",
+                      "type": "string",
+                      "example": "Continuous"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "publisher": {
+            "type": "string",
+            "example": "Model Publisher"
+          },
+          "publish-date": {
+            "type": "string",
+            "example": "Model Publish Date"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Model": {
+        "title": "Model",
+        "type": "object",
+        "description": "An UP2TOM Digital Twin AI model",
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "model"
+          },
+          "id": {
+            "description": "ID of the model",
+            "type": "string",
+            "example": "64b5fb610a0b7a621acb1e4b"
+          },
+          "attributes": {
+            "type": "object",
+            "required": [
+              "name",
+              "description",
+              "metadata",
+              "publisher",
+              "publish-date"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Server Alarm V2 - Reduce Load true or false"
+              },
+              "description": {
+                "type": "string",
+                "example": "Disk temperature warning - take permeative action based on server room environment,  HVAC status and ventilation speed, outside temperature and forecast high for the day."
+              },
+              "metadata": {
+                "type": "object",
+                "required": [
+                  "prediction",
+                  "attributes"
+                ],
+                "properties": {
+                  "prediction": {
+                    "type": "object",
+                    "required": [
+                      "domain",
+                      "name",
+                      "question",
+                      "type"
+                    ],
+                    "properties": {
+                      "domain": {
+                        "type": "object",
+                        "required": [
+                          "type",
+                          "values"
+                        ],
+                        "properties": {
+                          "type": {
+                            "description": "The type of the domain",
+                            "type": "string",
+                            "example": "DomainC"
+                          },
+                          "values": {
+                            "description": "The allowed values of the domain",
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "name": {
+                        "description": "Name of the Prediction attribute",
+                        "type": "string",
+                        "example": "INPUTVAR0"
+                      },
+                      "question": {
+                        "description": "Question to be answered by the Prediction",
+                        "type": "string",
+                        "example": "Should we admit this patient?"
+                      },
+                      "type": {
+                        "description": "The type of the Prediction",
+                        "type": "string",
+                        "example": "Nominal"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "attributes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "domain",
+                        "name",
+                        "question",
+                        "type"
+                      ],
+                      "properties": {
+                        "domain": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "required": [
+                                "type",
+                                "values"
+                              ],
+                              "properties": {
+                                "type": {
+                                  "description": "The type of the domain",
+                                  "type": "string",
+                                  "example": "DomainC"
+                                },
+                                "values": {
+                                  "description": "The allowed values of the domain",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "required": [
+                                "lower",
+                                "upper",
+                                "discrete"
+                              ],
+                              "properties": {
+                                "type": {
+                                  "description": "The type of the domain",
+                                  "type": "string",
+                                  "example": "DomainR"
+                                },
+                                "lower": {
+                                  "description": "The lower bound of the domain",
+                                  "type": "integer"
+                                },
+                                "upper": {
+                                  "description": "The upper bound of the domain",
+                                  "type": "integer"
+                                },
+                                "discrete": {
+                                  "description": "Whether the domain is discrete",
+                                  "type": "boolean"
+                                },
+                                "interval": {
+                                  "description": "The step of the variable used in simulation. This value can be used to restrict possible inputs",
+                                  "type": "number",
+                                  "default": 1
+                                }
+                              },
+                              "additionalProperties": false
+                            }
+                          ]
+                        },
+                        "name": {
+                          "description": "Name of the Decision Input",
+                          "type": "string",
+                          "example": "INPUTVAR1"
+                        },
+                        "question": {
+                          "description": "Question of the Decision Input",
+                          "type": "string",
+                          "example": "How old are you?"
+                        },
+                        "type": {
+                          "description": "The type of the Decision Input",
+                          "type": "string",
+                          "example": "Continuous"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "publisher": {
+                "type": "string",
+                "example": "Model Publisher"
+              },
+              "publish-date": {
+                "type": "string",
+                "example": "Model Publish Date"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "Problem": {
+        "type": "object",
+        "additionalProperties": true,
+        "minProperties": 1,
+        "description": "The Problem Details JSON Object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "A URI reference",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string",
+            "description": "Problem Summary"
+          },
+          "status": {
+            "type": "integer",
+            "description": "The HTTP status code.",
+            "minimum": 400,
+            "maximum": 599
+          },
+          "detail": {
+            "type": "string",
+            "description": "A human-readable explanation specific to this occurrence of the problem."
+          },
+          "instance": {
+            "type": "string",
+            "description": "A URI reference that identifies the specific occurrence of the problem."
+          }
+        }
+      },
+      "Input": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "example": {
+          "INPUTVAR1": 30,
+          "INPUTVAR2": 60,
+          "INPUTVAR3": 13.25,
+          "INPUTVAR4": 22.13,
+          "INPUTVAR5": 53
+        }
+      },
+      "DecisionRequest": {
+        "type": "object",
+        "required": [
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "scenario"
+            ],
+            "description": "Type of request"
+          },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "example": {
+                  "INPUTVAR1": 30,
+                  "INPUTVAR2": 60,
+                  "INPUTVAR3": 13.25,
+                  "INPUTVAR4": 22.13,
+                  "INPUTVAR5": 53
+                }
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      },
+      "Reason": {
+        "type": "object",
+        "required": [
+          "antecedent",
+          "consequent",
+          "type"
+        ],
+        "properties": {
+          "antecedent": {
+            "type": "object",
+            "required": [
+              "index",
+              "threshold",
+              "type"
+            ],
+            "properties": {
+              "index": {
+                "description": "Index of the UP2TOM Decision Input that has triggered this UP2TOM Prediction Outcome",
+                "type": "integer",
+                "example": 4
+              },
+              "threshold": {
+                "description": "The threshold of the UP2TOM Decision Input configured to cause this trigger",
+                "type": "integer",
+                "example": 55
+              },
+              "type": {
+                "description": "The type of trigger rule",
+                "type": "string",
+                "example": "GT"
+              }
+            },
+            "additionalProperties": false
+          },
+          "consequent": {
+            "type": "object",
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "description": "The consequent AI result type",
+                "type": "string",
+                "example": "ClassRes"
+              },
+              "value": {
+                "description": "The UP2TOM Prediction Outcome",
+                "type": "string",
+                "example": "Yes"
+              }
+            },
+            "additionalProperties": false
+          },
+          "type": {
+            "description": "The Type of Reason for this UP2TOM Prediction Outcome",
+            "type": "string",
+            "enum": [
+              "BlantentEx",
+              "ValueEx"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "DecisionAttributes": {
+        "type": "object",
+        "required": [
+          "input",
+          "decision",
+          "meets-confidence",
+          "model",
+          "timestamp",
+          "reasons",
+          "confidence"
+        ],
+        "properties": {
+          "input": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "example": {
+              "INPUTVAR1": 30,
+              "INPUTVAR2": 60,
+              "INPUTVAR3": 13.25,
+              "INPUTVAR4": 22.13,
+              "INPUTVAR5": 53
+            }
+          },
+          "decision": {
+            "description": "UP2TOM Decision outcome",
+            "type": "string",
+            "example": "Yes"
+          },
+          "meets-confidence": {
+            "description": "True if the decision meets the confidence threshold",
+            "type": "boolean"
+          },
+          "model": {
+            "description": "UP2TOM Model ID",
+            "type": "string"
+          },
+          "timestamp": {
+            "description": "Decision timestamp",
+            "type": "string"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "antecedent",
+                "consequent",
+                "type"
+              ],
+              "properties": {
+                "antecedent": {
+                  "type": "object",
+                  "required": [
+                    "index",
+                    "threshold",
+                    "type"
+                  ],
+                  "properties": {
+                    "index": {
+                      "description": "Index of the UP2TOM Decision Input that has triggered this UP2TOM Prediction Outcome",
+                      "type": "integer",
+                      "example": 4
+                    },
+                    "threshold": {
+                      "description": "The threshold of the UP2TOM Decision Input configured to cause this trigger",
+                      "type": "integer",
+                      "example": 55
+                    },
+                    "type": {
+                      "description": "The type of trigger rule",
+                      "type": "string",
+                      "example": "GT"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "consequent": {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "value"
+                  ],
+                  "properties": {
+                    "type": {
+                      "description": "The consequent AI result type",
+                      "type": "string",
+                      "example": "ClassRes"
+                    },
+                    "value": {
+                      "description": "The UP2TOM Prediction Outcome",
+                      "type": "string",
+                      "example": "Yes"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "type": {
+                  "description": "The Type of Reason for this UP2TOM Prediction Outcome",
+                  "type": "string",
+                  "enum": [
+                    "BlantentEx",
+                    "ValueEx"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "confidence": {
+            "description": "Decision confidence",
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DecisionResult": {
+        "type": "object",
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "properties": {
+          "attributes": {
+            "type": "object",
+            "required": [
+              "input",
+              "decision",
+              "meets-confidence",
+              "model",
+              "timestamp",
+              "reasons",
+              "confidence"
+            ],
+            "properties": {
+              "input": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "example": {
+                  "INPUTVAR1": 30,
+                  "INPUTVAR2": 60,
+                  "INPUTVAR3": 13.25,
+                  "INPUTVAR4": 22.13,
+                  "INPUTVAR5": 53
+                }
+              },
+              "decision": {
+                "description": "UP2TOM Decision outcome",
+                "type": "string",
+                "example": "Yes"
+              },
+              "meets-confidence": {
+                "description": "True if the decision meets the confidence threshold",
+                "type": "boolean"
+              },
+              "model": {
+                "description": "UP2TOM Model ID",
+                "type": "string"
+              },
+              "timestamp": {
+                "description": "Decision timestamp",
+                "type": "string"
+              },
+              "reasons": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "antecedent",
+                    "consequent",
+                    "type"
+                  ],
+                  "properties": {
+                    "antecedent": {
+                      "type": "object",
+                      "required": [
+                        "index",
+                        "threshold",
+                        "type"
+                      ],
+                      "properties": {
+                        "index": {
+                          "description": "Index of the UP2TOM Decision Input that has triggered this UP2TOM Prediction Outcome",
+                          "type": "integer",
+                          "example": 4
+                        },
+                        "threshold": {
+                          "description": "The threshold of the UP2TOM Decision Input configured to cause this trigger",
+                          "type": "integer",
+                          "example": 55
+                        },
+                        "type": {
+                          "description": "The type of trigger rule",
+                          "type": "string",
+                          "example": "GT"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "consequent": {
+                      "type": "object",
+                      "required": [
+                        "type",
+                        "value"
+                      ],
+                      "properties": {
+                        "type": {
+                          "description": "The consequent AI result type",
+                          "type": "string",
+                          "example": "ClassRes"
+                        },
+                        "value": {
+                          "description": "The UP2TOM Prediction Outcome",
+                          "type": "string",
+                          "example": "Yes"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "type": {
+                      "description": "The Type of Reason for this UP2TOM Prediction Outcome",
+                      "type": "string",
+                      "enum": [
+                        "BlantentEx",
+                        "ValueEx"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "confidence": {
+                "description": "Decision confidence",
+                "type": "number"
+              }
+            },
+            "additionalProperties": false
+          },
+          "id": {
+            "description": "Unique ID of the Decision",
+            "type": "string",
+            "example": "64b5fb610a0b7a621acb1e4b-b961da1c"
+          },
+          "type": {
+            "description": "Type of the Decision",
+            "type": "string",
+            "example": "scenario"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "responses": {
+      "Problem": {
+        "description": "Problem",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": true,
+              "minProperties": 1,
+              "description": "The Problem Details JSON Object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "A URI reference",
+                  "format": "uri"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Problem Summary"
+                },
+                "status": {
+                  "type": "integer",
+                  "description": "The HTTP status code.",
+                  "minimum": 400,
+                  "maximum": 599
+                },
+                "detail": {
+                  "type": "string",
+                  "description": "A human-readable explanation specific to this occurrence of the problem."
+                },
+                "instance": {
+                  "type": "string",
+                  "description": "A URI reference that identifies the specific occurrence of the problem."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-tagGroups": [
+    {
+      "name": "UP2TOM",
+      "tags": [
+        "Model",
+        "Decision",
+        "Info"
+      ]
+    }
+  ]
+}

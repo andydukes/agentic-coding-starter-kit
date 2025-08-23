@@ -1,0 +1,1 @@
+ALTER TABLE "endpoint_definitions" RENAME COLUMN "authRef" TO "auth_ref";
