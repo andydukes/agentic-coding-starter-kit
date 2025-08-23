@@ -46,7 +46,19 @@ Living to-do list for the current application build. I will keep this updated as
 - [x] Utility: server-side helper `setLastValue(attributeId, payload, source, responseId?)` with domain-aware validation
 
 ### Security & Ops
+- [x] Schema: Added authentication configuration to `endpoint_definitions`:
+  - `authType`: NONE|BASIC|BEARER|API_KEY
+  - `authConfig`: JSONB for auth-specific settings
+  - `authRef`: Reference to secure credential storage
+- [x] Implement `AuthConfigForm` React component for auth configuration
+- [x] Create Storybook stories for `AuthConfigForm`
+- [x] Set up shared TypeScript types for auth configuration
+- [x] Create UI components (Input, Label, Select, Button)
+- [ ] Implement credential management UI/API for auth configuration
+- [ ] Add request interceptor to inject auth headers/query params based on endpoint config
 - [ ] Use `authRef` indirection to fetch secrets from secure storage
+- [ ] Add validation and error handling for auth configuration
+- [ ] Write unit tests for auth components and utilities
 - [ ] Basic auditing on admin mutations (created_by/updated_by or activity log)
 - [ ] Add observability fields like `trace_id` (DB + logs) and simple metrics
 
